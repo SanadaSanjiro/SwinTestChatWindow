@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
@@ -29,16 +30,21 @@ class Main {
         northPanel.add(menuBar);
         northPanel.setLayout(flowLayout);
 
-        //Создаем текстовое поле
+        //Создаем текстовое поле и панель с прокруткой
         JTextArea textArea = new JTextArea();
+        textArea.setEditable(false);
         textArea.setText("Начало беседы");
+        JScrollPane scrollPane = new JScrollPane(textArea);
 
         //Создаем нижнюю панель с полем ввода текста и кнопками
         JPanel southPanel = new JPanel(); // the panel is not visible in output
         JLabel label = new JLabel("Enter Text");
         JTextField textField = new JTextField(10); // accepts upto 10 characters
 
-        //добавляем обработчик событий для отправки сообщений по нажатию ENTER
+        //добавляем обработчик событий для отправки сообщений
+
+
+
         textField.addActionListener(new Action() {
             @Override
             public Object getValue(String key) {
@@ -73,11 +79,12 @@ class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String message = textField.getText();
+                String text = textArea.getText();
                 textField.setText("");
                 Date date = new Date(System.currentTimeMillis());
                 SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-                message = System.lineSeparator() + df.format(date) + " > " +  message;
-                textArea.append(message);
+                text += System.lineSeparator() + df.format(date) + " > " + message;
+                textArea.setText(text);
             }
         });
 
@@ -121,11 +128,12 @@ class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String message = textField.getText();
+                String text = textArea.getText();
                 textField.setText("");
                 Date date = new Date(System.currentTimeMillis());
                 SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-                message = System.lineSeparator() + df.format(date) + " > " +  message;
-                textArea.append(message);
+                text += System.lineSeparator() + df.format(date) + " > " + message;
+                textArea.setText(text);
             }
         });
 
@@ -179,8 +187,7 @@ class Main {
 
         frame.getContentPane().add(BorderLayout.NORTH, northPanel); //помещаем на верх верхнюю панель
         frame.getContentPane().add(BorderLayout.SOUTH, southPanel); //помещаем вниз нижнюю панель
-        frame.getContentPane().add(BorderLayout.CENTER, textArea); //размещаем в центре текстовое поле
+        frame.getContentPane().add(BorderLayout.CENTER, scrollPane); //размещаем в центре текстовое поле
         frame.setVisible(true);
-
     }
 }
